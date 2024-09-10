@@ -2,7 +2,7 @@
 * Blogzine - Blog and Magazine Bootstrap 5 Theme
 *
 * @author Webestica (https://www.webestica.com/)
-* @version 1.3.2
+* @version 1.0.0
 **/
 
 
@@ -22,13 +22,6 @@ Table Of Content
 11 STICKY FOOTER
 12 GLIGHTBOX
 13 ISOTOPE
-14 FONT SIZE
-15 LAZY LOAD
-16 QUILL EDITOR
-17 VIDEO PLAYER
-18 OVERLAY SCROLLBAR
-19 DASHBOARD CHART
-20 TRAFFIC CHART
 ====================== */
 
 "use strict";
@@ -69,15 +62,6 @@ Table Of Content
     }
 }();
 
-// Get CSS var value
-var ThemeColor = function () {
-  return {
-    getCssVariableValue: function (e) {
-      var t = getComputedStyle(document.documentElement).getPropertyValue(e);
-      return t && t.length > 0 && (t = t.trim()), t;
-    }
-  };
-}();
 
 var e = {
     init: function () {
@@ -94,13 +78,7 @@ var e = {
         e.stickyFooter(),
         e.lightBox(),
         e.enableIsotope(),
-        e.zooming(),
-        e.lazyLoading(),
-        e.quill(),
-        e.videoPlyr()
-        e.overlayScrollbars(),
-        e.trafficsourcesChart(),
-        e.trafficstatsChart();
+        e.activeClass();
     },
     isVariableDefined: function (el) {
         return typeof !!el && (el) != 'undefined' && el != null;
@@ -321,9 +299,6 @@ var e = {
               var sliderAutoPlay = slider1.getAttribute('data-autoplay') !== 'false'; //option: true or false
               var sliderAutoPlayTime = slider1.getAttribute('data-autoplaytime') ? slider1.getAttribute('data-autoplaytime') : 4000;
               var sliderHoverPause = slider1.getAttribute('data-hoverpause') === 'true'; //option: true or false
-              if (e.isVariableDefined(e.select('.custom-thumb'))) {
-                var sliderNavContainer = e.select('.custom-thumb');
-              } 
               var sliderLoop = slider1.getAttribute('data-loop') !== 'false'; //option: true or false
               var sliderRewind = slider1.getAttribute('data-rewind') === 'true'; //option: true or false
               var sliderAutoHeight = slider1.getAttribute('data-autoheight') === 'true'; //option: true or false
@@ -353,7 +328,8 @@ var e = {
                   autoplayButton: false,
                   autoplayButtonOutput: false,
                   controlsPosition: top,
-                  navContainer: sliderNavContainer,
+                //   navContainer: '#custom-thumb',
+                  // controlsContainer: '#customize-controls',
                   navPosition: top,
                   autoplayPosition: top,
                   controlsText: [
@@ -368,9 +344,17 @@ var e = {
                   mouseDrag: sliderDrag,
                   arrowKeys: true,
                   items: sliderItems,
+// 'customize': {
+//       container: '#customize-cont',
+//       items: 3,
+//       controlsContainer: '#customize-controls',
+//       navContainer: '#custom-thumbnails',
+//       navAsThumbnails: true,
+//       autoplay: true,
+//       autoplayTimeout: 1000,
+//       autoplayButton: '#customize-toggle',
+//     },
                   textDirection: sliderDirection,
-                  lazyload: true,
-                  lazyloadSelector: '.lazy',
                   responsive: {
                       0: {
                           items: Number(sliderItemsXs)
@@ -407,8 +391,8 @@ var e = {
 
     // START: 06 Sticky Bar
     stickyBar: function () {
-        var sb = e.select('[data-sticky]');
-        if (e.isVariableDefined(sb)) {
+        var stickyBar = e.select('[data-sticky]');
+        if (e.isVariableDefined(stickyBar)) {
             var sticky = new Sticky('[data-sticky]');
         }
     },
@@ -459,13 +443,14 @@ var e = {
     },
     // END: Back to Top
 
+    
     // START: 10 Sticky post
     stickyPost: function () {
         var scrollpos = window.scrollY;
-        var sp = e.select('.sticky-post');
-        if (e.isVariableDefined(sp)) {
-            var add_class_on_scroll = () => sp.addClass("sticky-post-sticked");
-            var remove_class_on_scroll = () => sp.removeClass("sticky-post-sticked");
+        var stkpost = e.select('.sticky-post');
+        if (e.isVariableDefined(stkpost)) {
+            var add_class_on_scroll = () => stkpost.addClass("sticky-post-stick");
+            var remove_class_on_scroll = () => stkpost.removeClass("sticky-post-stick");
 
             window.addEventListener('scroll', function () {
                 scrollpos = window.scrollY;
@@ -477,7 +462,7 @@ var e = {
             });
         }
     },
-    // END: Sticky Post
+    // END: Back to Top
 
     // START: 11 Sticky Footer
     stickyFooter: function () {
@@ -565,215 +550,52 @@ var e = {
                     });
                 });
             }
-
         }
     },
     // END: Isotope
+    // START: 17 Active class
+    activeClass: function () {
+        var currentPath = window.location.pathname;
+        var path = currentPath.split("/").pop();
 
-    // START: 14 Font size
-    zooming: function () {
-      const doc = document.documentElement;
-      var radios = document.querySelectorAll('input[type=radio][name="fntradio"]');
-      radios.forEach(radio => {
-        radio.addEventListener("change", function() {
-            var idZ = radio.getAttribute('id');
-            if(idZ == 'font-sm') {
-              doc.classList.remove('font-lg');
-              doc.classList.add('font-sm');
-            } else if(idZ == 'font-default') {
-              doc.classList.remove('font-sm','font-lg');
-            } else if(idZ == 'font-lg') {
-              doc.classList.remove('font-sm');
-              doc.classList.add('font-lg');
+        var d = e.select(".navbar .left-sidebar");
+        if(e.isVariableDefined(d)) {
+          var hTarget = e.select('.left-sidebar .list-group-borderless .list-group-item[href="'+path+'"]');
+
+          if(e.isVariableDefined(hTarget)) {
+            var hh = hTarget.getAttribute("href");
+
+            if(path === hh) {
+              hTarget.classList.add('active');
             }
-        });
-      });
-    },
-    // END: Font size
-
-    // START: 15 Lazy Load
-    lazyLoading: function () {
-        var lazLoad = e.select('.lazy');
-        if (e.isVariableDefined(lazLoad)) {
-            var lazyLoadInstance = new LazyLoad({
-            });
+          }
         }
-    },
-    // END: Lazy Load
-
-    // START: 16 Quill Editor
-    quill: function () {
-      var ql = e.select('#quilleditor');
-      if (e.isVariableDefined(ql)) {
-        var editor = new Quill('#quilleditor', {
-          modules: { toolbar: '#quilltoolbar' },
-          theme: 'snow'
-        });
-      }
-    },
-    // END: Quill Editor
-
-  // START: 17 Video player
-  videoPlyr: function () {
-    var vdp = e.select('.player-wrapper');
-    if (e.isVariableDefined(vdp)) {
-      // youtube
-      const playerYoutube = Plyr.setup('.player-youtube', {});
-      window.player = playerYoutube;
-
-      // Vimeo
-      const playerVimeo = Plyr.setup('.player-vimeo', {});
-      window.player = playerVimeo;
-      
-      // HTML video
-      const playerHtmlvideo = Plyr.setup('.player-html', {
-        captions: {active: true}
-      });
-      window.player = playerHtmlvideo;
-
-      // HTML audio
-      const playerHtmlaudio = Plyr.setup('.player-audio', {});
-      window.player = playerHtmlaudio;
     }
-  },
-  // END: Video player
-
-  // START: 18 Overlay scrollbar
-  overlayScrollbars: function () {
-    var os = e.select('.custom-scrollbar');
-    if (os) {
-      document.addEventListener("DOMContentLoaded", function() {
-        var cs = document.querySelectorAll('.custom-scrollbar');
-        cs.forEach(c => {
-            OverlayScrollbars(c, {
-              scrollbars: {
-                autoHide: 'leave',
-                autoHideDelay: 200
-              },
-              overflowBehavior : {
-                  x : "visible-hidden",
-                  y : "scroll"
-              }
-             });
-        });
-      });
-    }
-  },
-  // END: Overlay scrollbar
-
-  // START: 19 Dashboard Chart
-  trafficsourcesChart: function () {
-    var ac = e.select('#apexChartTrafficSources');
-    if (e.isVariableDefined(ac)) {
-      var options = {
-        colors: [
-          '#2163e8', '#0cbc87', '#d6293e', '#f7c32e'
-        ],
-        labels: ['Search', 'Direct', 'Social', 'Display ads'],
-        series: [44, 55, 41, 17],
-        legend: {
-          show: false,
-          position: 'right'
-        },
-        chart: {
-          height: 300,
-          type: 'donut',
-        },
-        plotOptions: {
-          pie: {
-            donut: {
-              size: '75%',
-            },
-            offsetY: 20,
-          },
-          stroke: {
-            colors: undefined
-          }
-        },
-        stroke:{
-          show: false
-        },
-        dataLabels: {
-          enabled: false
-        },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              height: 200
-            },
-            legend: {
-              show: false
-            }
-          }
-        }]
-      };
-    var chart = new ApexCharts(document.querySelector("#apexChartTrafficSources"), options);
-    chart.render();
-    }
-  },
-  // END: Dashboard Chart
-
-  // START: 20 Traffic Chart
-  trafficstatsChart: function () {
-    var cpv = e.select('#apexChartTrafficStats');
-    if (e.isVariableDefined(cpv)) {
-      var options = {
-        colors: [
-          '#2163e8',
-        ],
-        series: [{
-          name: 'Users',
-          data: [100, 401, 305, 501, 409, 602, 609, 901, 848, 602, 809, 901]
-        }],
-        chart: {
-          height: 320,
-          type: 'area',
-          toolbar: {
-            show: false
-          }
-        },
-        grid: {
-          strokeDashArray: 4,
-          position: 'back'
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth'
-        },
-        legend: {
-          show: true,
-          horizontalAlign: 'right',
-          position: 'top',
-          labels: {
-          },
-          markers: {
-            width: 8,
-            height: 8
-          }
-        },
-        xaxis: {
-          labels: {
-            show: true
-          },
-          axisBorder: {
-            show: false
-          },
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        },
-        tooltip: {
-          x: {
-            format: 'dd/MM/yy HH:mm'
-          },
-        },
-      };
-      var chart = new ApexCharts(document.querySelector("#apexChartTrafficStats"), options);
-      chart.render();
-    }
-  },
-  // END: Traffic Chart   
-
+    // END: Active class
 };
 e.init();
+
+/* Custom Scrollbar */
+var el = document.querySelector('.left-sidebar');
+SimpleScrollbar.initEl(el);
+
+/* Clipboard JS - Copy code button */
+var cl = document.querySelector('.copy-link');
+if(typeof !!cl && (cl) != 'undefined' && cl != null) {
+        var cle = document.querySelectorAll('.copy-link');
+        cle.forEach(el => {
+            el.addEventListener("click", function () {
+                      var theButton = this;
+                      var copyId = this.getAttribute('id');
+                      var clipboard = new ClipboardJS( '#' + copyId );
+                      
+                      clipboard.on('success', function(e) {
+                        e.clearSelection();
+                      theButton.innerHTML = 'Copied';
+                      setTimeout(function() {
+                          theButton.innerHTML = 'Copy';
+                        }, 10000);
+                      });
+            });         
+        });
+} 
