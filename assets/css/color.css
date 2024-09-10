@@ -11,13 +11,15 @@
 
 /* Update below HEX and RGB color code to your primary color for dark mode */
 [data-bs-theme=dark] {
-  --bs-primary: #f0ac19 !important;
-  --bs-primary-rgb: 240, 172, 25 !important;
-  --bs-link-color: #f0ac19 !important;
-  --bs-link-hover-color: #c48a0b !important;
-  --bs-link-color-rgb: 240, 172, 25 !important;
-  --bs-link-hover-color-rgb: 196, 138, 11;
-  --bs-nav-pills-link-active-bg: #f0ac19 !important;
+  --bs-primary: #1ed9f6 !important;
+  --bs-primary-rgb: rgb(30, 217, 246) !important;
+  --bs-primary: rgb(30, 217, 246) !important;
+  --bs-link-color: rgb(30, 217, 246) !important;
+  --bs-primary: #1ed9f6 !important;
+  --bs-link-hover-color: rgb(30, 217, 246) !important;
+  --bs-link-color-rgb: rgb(30, 217, 246) !important;
+  --bs-link-hover-color-rgb: rgb(30, 217, 246) --bs-primary: rgb(30, 217, 246) !important;
+  --bs-nav-pills-link-active-bg: rgb(30, 217, 246) !important;
 }
 
 
